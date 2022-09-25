@@ -9,8 +9,7 @@ class Dataset(torch.utils.data.Dataset):
     def __init__(self, root, transforms=None):
         self.root = root
         self.transforms = transforms
-        # load all image files, sorting them to
-        # ensure that they are aligned
+        # load all image files and sorting 
         self.imgs = list(sorted(os.listdir(os.path.join(root, "images"))))
         self.masks = list(sorted(os.listdir(os.path.join(root, "masks"))))
 
@@ -19,19 +18,15 @@ class Dataset(torch.utils.data.Dataset):
         img_path = os.path.join(self.root, "images", self.imgs[idx])
         mask_path = os.path.join(self.root, "masks", self.masks[idx])
         img = Image.open(img_path).convert("RGB")
-        # note that we haven't converted the mask to RGB,
-        # because each color corresponds to a different instance
-        # with 0 being background
+    
         mask = Image.open(mask_path).convert('L')
 
         mask = np.array(mask)
-        # instances are encoded as different colors
+       
         obj_ids = np.unique(mask)
-        # first id is the background, so remove it
-        #obj_ids = obj_ids[1:]
+      
+        obj_ids = obj_ids[1:]
 
-        # split the color-encoded mask into a set
-        # of binary masks
         masks = mask == obj_ids[:, None, None]
       
         # get bounding box coordinates for each mask

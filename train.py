@@ -4,8 +4,6 @@ from dataset import Dataset
 from engine import train_one_epoch, evaluate
 import utils
 from model import *
-import wandb
-wandb.init(project="local", entity="aksovius")
 
 DATASET = './dataset'
 
@@ -53,6 +51,6 @@ for epoch in range(num_epochs):
             'epoch': epoch, 
             'model_state_dict': model.state_dict(), 
             'optimizer_state_dict': optimizer.state_dict(),
-            }, './model/epoch_' + str(epoch) + '_.pth')
+            }, './model/one_class_epoch_' + str(epoch) + '_.pth')
     lr_scheduler.step()
     evaluate(model, data_loader_test, device=device)
